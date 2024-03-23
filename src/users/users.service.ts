@@ -63,12 +63,21 @@ export class UsersService {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
+    let currentPassword;
+
+    const isEqual = dto.password == user.password; //await this.compare(dto.password, user.password);
+    if (isEqual) {
+      currentPassword = user.password;
+    } else {
+      currentPassword = await this.hash(dto.password);
+    }
+
     // Update user details
     const updatedUser = await this.prismaService.users.update({
       where: { id: dto.id },
       data: {
         name: dto.name,
-        password: await this.hash(dto.password),
+        password: currentPassword,
         email: dto.email,
         phone_number: dto.phone_number,
       },
