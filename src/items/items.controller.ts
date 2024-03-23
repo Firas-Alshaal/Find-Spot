@@ -12,14 +12,14 @@ import {
 } from '@nestjs/common';
 import {
   AnyFilesInterceptor,
-  FilesInterceptor,
+  // FilesInterceptor,
 } from '@nestjs/platform-express';
 import { CreateItemDto } from './dtos/create-item.dto';
 import { ItemsService } from './items.service';
 import { AccessTokenGuard } from 'src/common/guards/access-token.guard';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
-import { MulterError, diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
+// import { MulterError, diskStorage } from 'multer';
+// import { v4 as uuidv4 } from 'uuid';
 import { ItemTypeEnum } from './enums/item-type.enum';
 
 @UseGuards(AccessTokenGuard)

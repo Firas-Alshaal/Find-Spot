@@ -3,6 +3,7 @@ import { PrismaService } from 'src/common/database';
 import { RegisterDto } from './dtos/register.dto';
 import { compare, genSalt, hash } from 'bcrypt';
 import { LoginDto } from './dtos/login.dto';
+import { EditDto } from './dtos/edit.dto';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -51,6 +52,29 @@ export class UsersService {
 
     const accessToken = await this.generateAccessToken(user);
     return { accessToken, user };
+  }
+
+  async editUser(dto: EditDto) {
+    // Check if the user exists
+    const user = await this.prismaService.users.findUnique({
+      where: { id: dto.id },
+    });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    // Update user details
+    const updatedUser = await this.prismaService.users.update({
+      where: { id: dto.id },
+      data: {
+        name: dto.name,
+        password: await this.hash(dto.password),
+        email: dto.email,
+        phone_number: dto.phone_number,
+      },
+    });
+
+    return updatedUser;
   }
 
   async generateAccessToken(user) {
