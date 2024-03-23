@@ -9,6 +9,7 @@ import { PrismaModule } from './common/database';
 import { AccessTokenGuard } from './common/guards/access-token.guard';
 import { ItemsModule } from './items/items.module';
 import { UsersModule } from './users/users.module';
+import { GenericHttpModule } from './common/http/http.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UsersModule } from './users/users.module';
     CategoriesModule,
     PrismaModule,
     JwtModule.registerAsync(jwtConfig.asProvider()),
+    GenericHttpModule,
   ],
   controllers: [AppController],
   providers: [AppService, AccessTokenGuard],

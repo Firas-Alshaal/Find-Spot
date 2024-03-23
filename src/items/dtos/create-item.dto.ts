@@ -1,4 +1,4 @@
-import { IsDate, IsDateString, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsNumber, IsString } from 'class-validator';
 
 export class CreateItemDto {
   @IsString()
@@ -13,7 +13,7 @@ export class CreateItemDto {
   @IsString()
   description!: string;
 
-  images!: Express.Multer.File[] | string[];
+  images!: Express.Multer.File[];
 
   @IsNumber()
   lat!: number;
@@ -26,4 +26,6 @@ export class CreateItemDto {
 
   @IsString()
   categoryId!: string;
+
+  // files: Express.Multer.File[];
 }

@@ -2,21 +2,31 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/common/database';
 import { CreateItemDto } from './dtos/create-item.dto';
 import { ItemTypeEnum } from './enums/item-type.enum';
-// import * as moment from 'moment';
-// import { log } from 'console';
+import { BunnyFileService } from 'src/common/bunny/bunny-file.service';
 
 @Injectable()
 export class ItemsService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly bunnyFileService: BunnyFileService,
+  ) {}
 
   async addLostItem(dto: CreateItemDto, isLost: boolean, userId: string) {
+    const imagesLinks = [];
+    for (let i = 0; i < dto.images.length; i++) {
+      const { link } = await this.bunnyFileService.uploadFile(
+        dto.images[i] as Express.Multer.File,
+      );
+      imagesLinks.push(link);
+    }
+
     return await this.prismaService.items.create({
       data: {
         city: dto.city,
         street: dto.street,
         name: dto.name,
         description: dto.description,
-        images: dto.images as unknown as string[],
+        images: imagesLinks,
         location: [dto.long, dto.lat],
         lost_date: dto.lostDate,
         user_id: userId,
@@ -27,13 +37,20 @@ export class ItemsService {
   }
 
   async addFoundItem(dto: CreateItemDto, isLost: boolean, userId: string) {
+    const imagesLinks = [];
+    for (let i = 0; i < dto.images.length; i++) {
+      const { link } = await this.bunnyFileService.uploadFile(
+        dto.images[i] as Express.Multer.File,
+      );
+      imagesLinks.push(link);
+    }
     return await this.prismaService.items.create({
       data: {
         city: dto.city,
         street: dto.street,
         name: dto.name,
         description: dto.description,
-        images: dto.images as unknown as string[],
+        images: imagesLinks,
         location: [dto.long, dto.lat],
         lost_date: dto.lostDate,
         user_id: userId,

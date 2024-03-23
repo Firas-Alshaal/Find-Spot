@@ -58,7 +58,7 @@ export class UsersService {
       { sub: user.id, email: user.email },
       {
         secret: process.env.JWT_SECRET,
-        expiresIn: process.env.JWT_EXPIRATION,
+        expiresIn: '30d', //process.env.JWT_EXPIRATION,
       },
     );
   }
